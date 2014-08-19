@@ -686,6 +686,9 @@ SERVER_CMD_FUNCTION (curve_recalc_csum)
             if(!curve->read_block(curve, (uint16_t)i, block, &read_bytes))
                 MESSAGE_SET_ANSWER_RET(send_msg, CMD_ERR_RESOURCE_BUSY);
             MD5Update(&md5ctx, block, read_bytes);
+
+            if(read_bytes < curve->info.nblocks)
+                break;
         }
         MD5Final(curve->info.checksum, &md5ctx);
     }
