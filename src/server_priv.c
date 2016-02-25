@@ -639,6 +639,10 @@ SERVER_CMD_FUNCTION (curve_block)
     if(block_offset >= curve->info.nblocks)
         MESSAGE_SET_ANSWER_RET(send_msg, CMD_ERR_INVALID_VALUE);
 
+    // Check whether the curve can be modified
+    if (!curve->info.writable)
+        MESSAGE_SET_ANSWER_RET(send_msg, CMD_ERR_READ_ONLY);
+
     // Everything ok, write block
     bool ok = curve->write_block(curve, block_offset,
                                  recv_msg->payload + BSMP_CURVE_BLOCK_INFO,
