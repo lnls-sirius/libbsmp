@@ -8,6 +8,7 @@ compile/
 test.sh
 b/
 .deps/
+*.swp
 
 # Object files
 *.o
