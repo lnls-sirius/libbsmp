@@ -714,15 +714,15 @@ SERVER_CMD_FUNCTION (func_query_list)
 
     struct bsmp_func_info *func_info;
     unsigned int i;
+
     for(i = 0; i < server->funcs.count; ++i)
     {
         func_info = &server->funcs.list[i]->info;
-
-        send_msg->payload[i] = (func_info->input_size << 4) |
-                               (func_info->output_size & 0x0F);
+        send_msg->payload[(2*i)] = func_info->input_size;
+        send_msg->payload[(2*i)+1] = func_info->output_size;
     }
 
-    send_msg->payload_size = server->funcs.count;
+    send_msg->payload_size = 2*server->funcs.count;
 }
 
 SERVER_CMD_FUNCTION (func_execute)
@@ -756,4 +756,3 @@ SERVER_CMD_FUNCTION (func_execute)
         send_msg->payload_size = func->info.output_size;
     }
 }
-

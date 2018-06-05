@@ -291,16 +291,15 @@ static enum bsmp_err update_funcs_list(bsmp_client_t *client)
     // Zero list
     memset(&client->funcs, 0, sizeof(client->funcs));
 
-    // Number of bytes in the payload corresponds to the number of funcs in the
+    // Number of dual-bytes in the payload corresponds to the number of funcs in the
     // server
-    client->funcs.count = response.payload_size;
-
+    client->funcs.count = (response.payload_size)/2;
     unsigned int i;
     for(i = 0; i < client->funcs.count; ++i)
     {
         client->funcs.list[i].id            = i;
-        client->funcs.list[i].input_size    = (response.payload[i] & 0xF0) >> 4;
-        client->funcs.list[i].output_size   = (response.payload[i] & 0x0F);
+        client->funcs.list[i].input_size    = response.payload[2*i];
+        client->funcs.list[i].output_size   = response.payload[(2*i)+1];
     }
 
     return BSMP_SUCCESS;
